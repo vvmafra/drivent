@@ -20,7 +20,7 @@ async function getTicketsUser(userId:number){
 }
 
 async function postTicket(userId:number, ticketTypeId:number){
-    if (!ticketTypeId) throw notFoundError()
+    if (!ticketTypeId) throw requestError(400,"Bad request")
 
     const newTicket = await ticketsRepository.postTicket(userId, ticketTypeId)
     return newTicket

@@ -17,7 +17,7 @@ export async function getTicketsUser(req: AuthenticatedRequest, res: Response){
 
     try {
         const ticketsUser = await ticketService.getTicketsUser(userId)
-        res.status(httpStatus.CREATED).send(ticketsUser)
+        res.status(httpStatus.OK).send(ticketsUser)
     }catch (error) {
         if (error.name === 'NotFoundError') {
             return res.sendStatus(httpStatus.NOT_FOUND);
@@ -34,9 +34,12 @@ export async function postTicket(req: AuthenticatedRequest, res: Response) {
         const newTicket = ticketService.getTicketsUser(userId)
         res.status(201).send(newTicket)
     } catch (error) {
-        if (error.name === 'NotFoundError' || error.name === 'RequestError') {
-          return res.sendStatus(httpStatus.NO_CONTENT);
+        if (error.name === 'NotFoundError') {
+          return res.sendStatus(httpStatus.NOT_FOUND);
+        } else if (error.name === 'RequestError') {
+            return res.sendStatus(httpStatus.BAD_REQUEST)
         }
+
         res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
       }
 }
