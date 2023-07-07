@@ -14,10 +14,11 @@ export async function getTicketTypes(req: Request, res: Response) {
 
 export async function getTicketsUser(req: AuthenticatedRequest, res: Response){
 
-    const {userId} = req
+    const userId = req.userId
 
     try {
         const ticketsUser = await ticketService.getTicketsUser(userId)
+        res.send(ticketsUser)
     }catch (error) {
         return res.status(httpStatus.NOT_FOUND).send([]);
       }
