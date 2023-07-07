@@ -6,7 +6,7 @@ import { AuthenticatedRequest } from '@/middlewares';
 export async function getTicketTypes(req: Request, res: Response) {
     try {
         const tickets = await ticketService.getTicketTypes();
-        res.send(tickets)
+        res.status(httpStatus.OK).send(tickets)
     } catch (error) {
         return res.status(httpStatus.NOT_FOUND).send([]);
       }
@@ -19,8 +19,11 @@ export async function getTicketsUser(req: AuthenticatedRequest, res: Response){
         const ticketsUser = await ticketService.getTicketsUser(userId)
         res.status(httpStatus.CREATED).send(ticketsUser)
     }catch (error) {
-        return res.status(httpStatus.BAD_REQUEST).send([]);
-      }
+        if (error.name === 'NotFoundError') {
+            return res.sendStatus(httpStatus.NOT_FOUND);
+          }
+          res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+        }
 }
 
 export async function postTicket(req: AuthenticatedRequest, res: Response) {
