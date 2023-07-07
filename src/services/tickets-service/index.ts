@@ -23,7 +23,7 @@ async function postTicket(userId:number, ticketTypeId:number){
     if (!ticketTypeId) throw notFoundError()
 
     const newTicket = await ticketsRepository.postTicket(userId, ticketTypeId)
-
+    return newTicket
 }
 
 const ticketService = {
