@@ -31,12 +31,13 @@ export async function postTicket(req: AuthenticatedRequest, res: Response) {
     const userId = req.userId
     const ticketTypeId = req.body
 
-    if (!ticketTypeId) throw requestError(400,"Bad request")
-    
+    if (!ticketTypeId) return res.sendStatus(httpStatus.BAD_REQUEST)
+
     try {
         await ticketService.postTicket(userId, ticketTypeId)
         const newTicket = ticketService.getTicketsUser(userId)
         res.status(httpStatus.CREATED).send(newTicket)
+        
     } catch (error) {
         if (error.name === 'NotFoundError'){
             return res.sendStatus(httpStatus.NOT_FOUND)
