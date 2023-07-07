@@ -1,6 +1,5 @@
-import { Prisma, Ticket, TicketType } from '@prisma/client';
+import { Ticket, TicketType } from '@prisma/client';
 import { prisma } from '@/config';
-import ticketService from '../../services/tickets-service';
 
 async function getTicketTypes() {
     const ticketsTypes = await prisma.ticketType.findMany()
@@ -47,9 +46,7 @@ async function postTicket(userId:number, ticketTypeId:number):Promise<Ticket>{
       data: {
         ticketTypeId,
         enrollmentId: userId,
-        status: "RESERVED",
-        createdAt: new Date(Date.now()), 
-        updatedAt: new Date(Date.now()),
+        status: "RESERVED"
       }
     })
 
