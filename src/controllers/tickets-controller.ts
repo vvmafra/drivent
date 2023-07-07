@@ -29,7 +29,7 @@ export async function getTicketsUser(req: AuthenticatedRequest, res: Response){
 
 export async function postTicket(req: AuthenticatedRequest, res: Response) {
     const userId = req.userId
-    const ticketTypeId = req.body
+    const {ticketTypeId }= req.body as {ticketTypeId: number}
 
     if (!ticketTypeId) return res.sendStatus(httpStatus.BAD_REQUEST)
 
@@ -37,7 +37,7 @@ export async function postTicket(req: AuthenticatedRequest, res: Response) {
         await ticketService.postTicket(userId, ticketTypeId)
         const newTicket = ticketService.getTicketsUser(userId)
         res.status(httpStatus.CREATED).send(newTicket)
-        
+
     } catch (error) {
         if (error.name === 'NotFoundError'){
             return res.sendStatus(httpStatus.NOT_FOUND)
