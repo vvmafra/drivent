@@ -5,8 +5,14 @@ async function getTicketTypes(){
     return tickets
 }
 
+async function getTicketsUser(userId:number){
+    const ticketUser = await ticketsRepository.getTicketsUser(userId)
+    return ticketUser
+}
+
 const ticketService = {
-    getTicketTypes
+    getTicketTypes,
+    getTicketsUser
 }
 
 export default ticketService
