@@ -13,14 +13,27 @@ export async function getTicketTypes(req: Request, res: Response) {
 }
 
 export async function getTicketsUser(req: AuthenticatedRequest, res: Response){
-
     const userId = req.userId
 
     try {
         const ticketsUser = await ticketService.getTicketsUser(userId)
-        res.send(ticketsUser)
+        res.status(httpStatus.CREATED).send(ticketsUser)
     }catch (error) {
-        return res.status(httpStatus.NOT_FOUND).send([]);
+        return res.status(httpStatus.BAD_REQUEST).send([]);
       }
+}
 
+export async function postTicket(req: AuthenticatedRequest, res: Response) {
+    const userId = req.userId
+    const ticketTypeId = req.body
+    try {
+        await ticketService.postTicket(userId, ticketTypeId)
+        const newTicket = ticketService.getTicketsUser(userId)
+        res.status(201).send(newTicket)
+    } catch (error) {
+        if (error.name === 'NotFoundError' || error.name === 'RequestError') {
+          return res.sendStatus(httpStatus.NO_CONTENT);
+        }
+        res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+      }
 }

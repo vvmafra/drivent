@@ -41,9 +41,25 @@ async function getTicketsUser(userId:number): Promise<Tickets> {
     return ticketsUser
 }
 
+
+async function postTicket(userId:number, ticketTypeId:number):Promise<Ticket>{
+    const newTicket = await prisma.ticket.create({
+      data: {
+        ticketTypeId,
+        enrollmentId: userId,
+        status: "RESERVED",
+        createdAt: new Date(Date.now()), 
+        updatedAt: new Date(Date.now()),
+      }
+    })
+
+    return newTicket
+}
+
 const ticketsRepository = {
     getTicketTypes,
     getTicketsUser,
+    postTicket
   };
   
   export default ticketsRepository;
