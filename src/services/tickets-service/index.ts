@@ -20,6 +20,9 @@ async function getTicketsUser(userId:number){
 }
 
 async function postTicket(userId:number, ticketTypeId:number){
+    const checkUser = await enrollmentRepository.findWithAddressByUserId(userId)
+    if (!checkUser) throw notFoundError()
+    
     if (!ticketTypeId) throw requestError(400,"Bad request")
 
     const newTicket = await ticketsRepository.postTicket(userId, ticketTypeId)
