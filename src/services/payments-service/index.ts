@@ -7,9 +7,9 @@ import ticketsRepository from "../../repositories/tickets-repository"
 async function getPayments(userId:number, ticketId:number){
 
     const ticket = await ticketsRepository.getTicketsUser(ticketId)
-    if (!ticket) throw notFoundError()
 
     console.log(ticket)
+    if (!ticket) throw notFoundError()
 
     const checkUser = await enrollmentRepository.findUser(ticket.enrollmentId)
     if(userId !== Number(checkUser.userId)) throw unauthorizedError()
