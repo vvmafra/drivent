@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { authenticateToken, validateBody } from '../middlewares';
-import { schemaTicket } from '@/schemas';
 import { getPayments, processPayment } from '@/controllers/payments-controller';
 
 
