@@ -16,9 +16,8 @@ async function getPayments(userId:number, ticketId:number){
 
     const payments = await paymentsRepository.getPayments(userId, ticketId)
     if (!payments) throw notFoundError()
-    const payment = payments[0]
 
-    return payment
+    return payments[0]
 }
 
 const paymentService = {
