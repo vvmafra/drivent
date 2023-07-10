@@ -35,7 +35,7 @@ export async function postTicket(req: AuthenticatedRequest, res: Response) {
 
     try {
         await ticketService.postTicket(userId, ticketTypeId)
-        const newTicket = ticketService.getTicketsUser(userId)
+        const newTicket = await ticketService.getTicketsUser(userId)
         res.status(httpStatus.CREATED).send(newTicket)
 
     } catch (error) {
