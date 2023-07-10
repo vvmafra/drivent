@@ -34,7 +34,7 @@ export async function processPayment(req: AuthenticatedRequest, res: Response){
     const paymentBody = req.body as BodyPayment
     const userId: number = req.userId
 
-    if (paymentBody.cardData || paymentBody.ticketId) return res.sendStatus(httpStatus.BAD_REQUEST)
+    if (!paymentBody.cardData || !paymentBody.ticketId) return res.sendStatus(httpStatus.BAD_REQUEST)
 
     try {
         const payment = await paymentService.processPayment(paymentBody, userId)
