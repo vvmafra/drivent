@@ -40,6 +40,15 @@ async function getTicketsUser(userId:number): Promise<Tickets> {
     return ticketsUser
 }
 
+async function getTicketId(ticketId:number): Promise<Ticket>{
+  const ticketsId = await prisma.ticket.findFirst({
+    where: {
+      id: ticketId
+    }
+  })
+  return ticketsId
+}
+
 
 async function postTicket(userId:number, ticketTypeId:number):Promise<Ticket>{
     const newTicket = await prisma.ticket.create({
@@ -55,7 +64,8 @@ async function postTicket(userId:number, ticketTypeId:number):Promise<Ticket>{
 const ticketsRepository = {
     getTicketTypes,
     getTicketsUser,
-    postTicket
+    postTicket,
+    getTicketId
   };
   
   export default ticketsRepository;
