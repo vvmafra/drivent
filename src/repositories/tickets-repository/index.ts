@@ -49,7 +49,6 @@ async function postTicket(userId:number, ticketTypeId:number):Promise<Ticket>{
         status: "RESERVED"
       }
     })
-    console.log(newTicket)
     return newTicket
 }
 

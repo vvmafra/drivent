@@ -14,10 +14,13 @@ export async function getPayments(req: AuthenticatedRequest, res: Response){
         const payments = await paymentService.getPayments(userId, ticketId);
         res.status(httpStatus.OK).send(payments)
     } catch (error) {
-        if (error.name === 'NotFoundError'){
+        if (error.name === 'UnauthorizedError') {
+            return res.sendStatus(httpStatus.UNAUTHORIZED)
+        }
+        else if (error.name === 'NotFoundError'){
             return res.sendStatus(httpStatus.NOT_FOUND)
         }
-        else if (error.name === 'RequestError' || error.name === "Bad Request") {
+        else if (error.name === 'RequestError') {
             return res.sendStatus(httpStatus.BAD_REQUEST)
         }
 
