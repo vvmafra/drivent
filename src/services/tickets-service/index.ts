@@ -20,7 +20,6 @@ async function getTicketsUser(userId:number){
 
 async function postTicket(userId:number, ticketTypeId:number){
     const checkUser = await enrollmentRepository.findUser(userId)
-    console.log(checkUser)
     if (!checkUser) throw notFoundError()
 
     const newTicket = await ticketsRepository.postTicket(userId, ticketTypeId)
