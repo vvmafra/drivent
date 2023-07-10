@@ -30,7 +30,7 @@ async function processPayment(paymentBody: BodyPayment, userId: number){
     await paymentsRepository.updatePaymentStatus(paymentBody.ticketId)
     const payment = await paymentsRepository.newPayment(paymentBody, userId)
 
-    return payment
+    return payment.payment
 }
 
 const paymentService = {
