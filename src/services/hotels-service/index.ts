@@ -18,6 +18,24 @@ async function getHotels(userId: number){
     return hotels
 }
 
-const hotelsServices = { getHotels }
+async function getHotelId(userId: number, hotelId:number) {
+    const hotel = await hotelsRepository.findHotelId(hotelId)
+
+    console.log(hotel)
+    
+    const enrollment = await enrollmentRepository.findUser(userId)
+    const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
+
+    if (!enrollment || !ticket || !hotel) throw notFoundError()
+
+    if (ticket.status === "RESERVED" || ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel === false) {
+        throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
+    }
+    
+
+    return hotel
+}
+
+const hotelsServices = { getHotels, getHotelId }
 
 export default hotelsServices
