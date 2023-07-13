@@ -9,14 +9,17 @@ async function getHotels(userId: number){
     const hotels = await hotelsRepository.findHotels()
 
     const enrollment = await enrollmentRepository.findUser(userId)
+    
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
-
-    if (!enrollment || !ticket || !hotels || hotels.length === 0) throw notFoundError()
 
     if (ticket.status === "RESERVED" || ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel === false) {
         throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
     }
+
+    if (!enrollment || !ticket || !hotels || hotels.length === 0) throw notFoundError()
+
+    
 
     return hotels
 }
