@@ -3,13 +3,11 @@ import { notFoundError, requestError } from "@/errors"
 import enrollmentRepository from "@/repositories/enrollment-repository"
 import ticketsRepository from "@/repositories/tickets-repository"
 import httpStatus from "http-status"
-import userRepository from "../../repositories/user-repository"
 
 async function getHotels(userId: number){
     const hotels = await hotelsRepository.findHotels()
 
-    const enrollment = await enrollmentRepository.findUser(userId)
-    
+    const enrollment = await enrollmentRepository.findWithAddressByUserId(userId)
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
 
@@ -27,7 +25,7 @@ async function getHotelId(userId: number, hotelId:number) {
 
     const Rooms = (await hotelsRepository.findHotelId(hotelId)).rooms
 
-    const enrollment = await enrollmentRepository.findUser(userId)
+    const enrollment = await enrollmentRepository.findWithAddressByUserId(userId)
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
 
