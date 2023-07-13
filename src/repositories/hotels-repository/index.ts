@@ -15,14 +15,15 @@ async function findHotelId(hotelId:number) {
     }
   })
 
-  const rooms = await prisma.room.findMany({
+  const Rooms = await prisma.room.findMany({
     where: {
       hotelId
     }
   })
 
+  const hotelWithRooms = { hotel, Rooms }
 
-  return { hotel, rooms }
+  return hotelWithRooms
 }
 
 export default {

@@ -11,19 +11,17 @@ async function getHotels(userId: number){
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
 
+    if (!enrollment || !ticket || !hotels || hotels.length === 0) throw notFoundError()
+
     if (ticket.status === "RESERVED" || ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel === false) {
         throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
     }
-
-    if (!enrollment || !ticket || !hotels || hotels.length === 0) throw notFoundError()
 
     return hotels
 }
 
 async function getHotelId(userId: number, hotelId:number) {
-    const hotel = (await hotelsRepository.findHotelId(hotelId)).hotel
-
-    const Rooms = (await hotelsRepository.findHotelId(hotelId)).rooms
+    const hotel = await hotelsRepository.findHotelId(hotelId)
 
     const enrollment = await enrollmentRepository.findWithAddressByUserId(userId)
 
@@ -35,12 +33,7 @@ async function getHotelId(userId: number, hotelId:number) {
         throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
     }
     
-    const hotelWithRooms = {
-        hotel,
-        Rooms
-    }
-
-    return hotelWithRooms
+    return hotel
 }
 
 const hotelsServices = { getHotels, getHotelId }
