@@ -23,7 +23,7 @@ async function findHotelId(hotelId:number) {
 
   const hotelWithRooms = { hotel, Rooms }
 
-  return hotelWithRooms
+  return {hotelWithRooms, hotel}
 }
 
 export default {
