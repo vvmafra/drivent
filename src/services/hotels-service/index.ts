@@ -19,8 +19,6 @@ async function getHotels(userId: number){
 
     if (!enrollment || !ticket || !hotels || hotels.length === 0) throw notFoundError()
 
-    
-
     return hotels
 }
 
