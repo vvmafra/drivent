@@ -10,8 +10,11 @@ export async function getHotels(req: AuthenticatedRequest, res: Response) {
     const hotels = await hotelsServices.getHotels(userId);
     return res.status(httpStatus.OK).send(hotels);
   } catch (error) {
-    if (error.name === 'DuplicatedEmailError') {
-      return res.status(httpStatus.CONFLICT).send(error);
+    if (error.name === 'NotFoundError') {
+      return res.status(httpStatus.NOT_FOUND).send(error);
+    }
+    else if (error.name === 'PaymentRequired') {
+      return res.status(httpStatus.PAYMENT_REQUIRED).send(error)
     }
     return res.status(httpStatus.BAD_REQUEST).send(error);
   }
