@@ -8,13 +8,11 @@ import userRepository from "../../repositories/user-repository"
 async function getHotels(userId: number){
     const hotels = await hotelsRepository.findHotels()
 
-    const user = await userRepository.findById(userId)
-
     const enrollment = await enrollmentRepository.findUser(userId)
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
 
-    if (!user || !ticket || !hotels || hotels.length === 0) throw notFoundError()
+    if (!enrollment || !ticket || !hotels || hotels.length === 0) throw notFoundError()
 
     if (ticket.status === "RESERVED" || ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel === false) {
         throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
@@ -28,13 +26,11 @@ async function getHotelId(userId: number, hotelId:number) {
 
     const Rooms = (await hotelsRepository.findHotelId(hotelId)).rooms
 
-    const user = await userRepository.findById(userId)
-
     const enrollment = await enrollmentRepository.findUser(userId)
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
 
-    if (!user || !ticket || !hotel) throw notFoundError()
+    if (!enrollment || !ticket || !hotel) throw notFoundError()
 
     if (ticket.status === "RESERVED" || ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel === false) {
         throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
