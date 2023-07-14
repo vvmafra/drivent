@@ -26,6 +26,7 @@ export async function getHotelId(req: AuthenticatedRequest, res: Response) {
   
   try {
     const hotel = await hotelsServices.getHotelId(userId, hotelId);
+    console.log(hotel)
     return res.status(httpStatus.OK).send(hotel);
   } catch (error) {
     if (error.name === 'NotFoundError') {
