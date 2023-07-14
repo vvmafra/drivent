@@ -14,36 +14,27 @@ async function getHotels(userId: number){
     console.log(hotels.length)
 
     if (!enrollment) {
-        console.log('enrollment error')
         throw notFoundError()
     }
 
     if (!ticket) {
-        console.log('ticket error')
         throw notFoundError()
     }
-
-    if (hotels.length === 0) {
-        console.log('hotel error')
-        throw notFoundError()
-    }
-   
 
     if (ticket.status === "RESERVED") {
-        console.log("Need to be PAID")
         throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
     }
 
     if (ticket.TicketType.isRemote === true) {
-        console.log("Need to be presencial")
         throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
     }
 
     if (ticket.TicketType.includesHotel === false) {
-        console.log("Need to include Hotel")
         throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
     }
+
     
+
     return hotels
 }
 
@@ -55,12 +46,16 @@ async function getHotelId(userId: number, hotelId:number) {
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
 
-    if (!enrollment || !ticket || !hotel) throw notFoundError()
+    if (!enrollment || !ticket) throw notFoundError()
 
     if (ticket.status === "RESERVED" || ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel === false) {
         throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
     }
     
+    if (!hotel) {
+        throw notFoundError()
+    }
+
     return hotelWithRooms
 }
 
