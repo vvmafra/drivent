@@ -55,8 +55,6 @@ async function getHotelId(userId: number, hotelId:number) {
 
     const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
 
-    console.log(ticket)
-
     if (!enrollment || !ticket || !hotel) throw notFoundError()
 
     if (ticket.status === "RESERVED" || ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel === false) {
