@@ -46,13 +46,17 @@ async function getHotelId(userId: number, hotelId:number) {
         throw requestError(httpStatus.PAYMENT_REQUIRED, "PaymentRequired")
     }
     
-    const hotel = await hotelsRepository.findHotelId(hotelId)
+    const hotel = (await hotelsRepository.findHotelId(hotelId)).hotel
+    const rooms = (await hotelsRepository.findHotelId(hotelId)).Rooms
+
+    const hotelWithRooms = {...hotel,
+    Rooms: rooms}
 
     if (!hotel) {
         throw notFoundError()
     }
 
-    return hotel
+    return hotelWithRooms
 }
 
 const hotelsServices = { getHotels, getHotelId }

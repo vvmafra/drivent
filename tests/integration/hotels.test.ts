@@ -163,6 +163,17 @@ describe('GET /hotel/hotelId', () => {
       });
 
     describe('when token is valid', () => { 
+        it('should respond with status 400 when hotelId is NaN', async () =>{
+            const token = await generateValidToken()
+            const hotelId = faker.name.firstName()
+
+            const response = await server.get(`/hotels/${hotelId}`).set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toEqual(httpStatus.BAD_REQUEST)
+
+        })
+
+
         it('should respond with status 404 when user doesnt have an enrollment yet', async () => {
             const token = await generateValidToken()
             const hotel = await createHotel()
@@ -250,21 +261,21 @@ describe('GET /hotel/hotelId', () => {
             const response = await server.get(`/hotels/${hotel.id}`).set('Authorization', `Bearer ${token}`)
 
             expect(response.status).toEqual(httpStatus.OK)
-            expect(response.body).toEqual([{
+            expect(response.body).toEqual({
                 id: hotel.id,
                 name: hotel.name,
                 image: hotel.image,
                 createdAt: hotel.createdAt.toISOString(),
                 updatedAt: hotel.updatedAt.toISOString(),
-                Rooms: {
+                Rooms: [{
                     id: expect.any(Number),
                     name: expect.any(String),
                     capacity: expect.any(Number),
                     hotelId: expect.any(Number),
                     createdAt: expect.any(String),
                     updatedAt: expect.any(String)  
-                    }
-            }])
+                    }]
+            })
         })
     })
 })
