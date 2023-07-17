@@ -5,7 +5,7 @@ export async function createHotel() {
     return prisma.hotel.create({
         data: {
           name: faker.name.firstName(),
-          image: faker.image.image()
+          image: faker.image.imageUrl()
         },
       });
 }

@@ -7,24 +7,17 @@ async function findHotels(): Promise<Hotel[]> {
 }
 
 async function findHotelId(hotelId:number) {
-
-
   const hotel = await prisma.hotel.findUnique({
     where: {
       id: hotelId
+    }, include : {
+      Rooms: true
     }
   })
 
-  const Rooms = await prisma.room.findMany({
-    where: {
-      hotelId
-    }
-  })
 
-  const hotelWithRooms = { hotel, 
-    rooms: Rooms }
 
-  return {hotelWithRooms, hotel}
+  return hotel
 }
 
 export default {
