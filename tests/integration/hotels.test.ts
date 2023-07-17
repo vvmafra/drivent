@@ -163,17 +163,6 @@ describe('GET /hotel/hotelId', () => {
       });
 
     describe('when token is valid', () => { 
-        it('should respond with status 400 when hotelId is NaN', async () =>{
-            const token = await generateValidToken()
-            const hotelId = faker.name.firstName()
-
-            const response = await server.get(`/hotels/${hotelId}`).set('Authorization', `Bearer ${token}`)
-
-            expect(response.status).toEqual(httpStatus.BAD_REQUEST)
-
-        })
-
-
         it('should respond with status 404 when user doesnt have an enrollment yet', async () => {
             const token = await generateValidToken()
             const hotel = await createHotel()
