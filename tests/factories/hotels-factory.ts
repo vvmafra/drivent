@@ -1,7 +1,5 @@
 import faker from '@faker-js/faker';
-import { TicketStatus } from '@prisma/client';
 import { prisma } from '@/config';
-import { number } from 'joi';
 
 export async function createHotel() {
     return prisma.hotel.create({
@@ -10,4 +8,15 @@ export async function createHotel() {
           image: faker.image.image()
         },
       });
+}
+
+export async function createRooms(hotelId: number) {
+    return prisma.room.create({
+      data: {
+        name: faker.name.middleName(),
+        capacity: faker.datatype.number(),
+        hotelId
+      }
+    })
+
 }
