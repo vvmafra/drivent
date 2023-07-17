@@ -22,7 +22,7 @@ async function findHotelId(hotelId:number) {
   })
 
   const hotelWithRooms = { hotel, 
-    Rooms: Rooms }
+    rooms: Rooms }
 
   return {hotelWithRooms, hotel}
 }
