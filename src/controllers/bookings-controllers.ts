@@ -28,3 +28,21 @@ export async function postBooking(req:AuthenticatedRequest, res: Response) {
     return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
+
+export async function changeRoom(req:AuthenticatedRequest, res: Response) {
+  const userId:number = req.userId
+  const roomId:number = req.body
+  const bookingId:number = parseInt(req.params.bookingId)
+
+  try {
+    const booking = await bookingService.putBooking(userId, roomId, bookingId);
+    return res.status(httpStatus.OK).send(booking.id);
+  } catch (e) {
+    if (e.type === "RemoteError" || e.type === "HotelError") {
+      return res.status(httpStatus.FORBIDDEN).send(e.message)
+    }
+    else if (e.type === "NoRoomError") return res.status(httpStatus.NOT_FOUND).send(e.message)
+
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
+}

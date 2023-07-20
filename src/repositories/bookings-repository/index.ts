@@ -46,9 +46,21 @@ async function addBooking(userId:number, roomId: number){
   })
 }
 
+async function putBooking(roomId:number, bookingId:number) {
+  return await prisma.booking.update({
+    where: {
+      id: bookingId
+    },
+    data: {
+      roomId
+    }
+  })
+}
+
 export default {
     findBookingObj,
     findBookingByuserId,
     findRoom,
-    addBooking
+    addBooking,
+    putBooking
   };

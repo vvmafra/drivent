@@ -27,7 +27,23 @@ async function postBooking(userId:number, roomId: number) {
   return newBooking;
 }
 
+async function putBooking(userId:number, roomId: number, bookingId: number) {
+  const booking = await bookingRepository.findBookingByuserId(userId)
+  const newRoom = await bookingRepository.findRoom(roomId)
 
-const bookingService = { getBookings, postBooking };
+  if (!booking) throw {message: "This user doesn't have a booking to chage", type:"BookingError"}
+  if (newRoom.capacity === 0) throw {message: "Room is already full", type: "RoomError"}
+  if (!newRoom) throw {message: "This room doesn't exist", type: "NoRoomError"}
+
+  const newBooking = await bookingRepository.putBooking(roomId, bookingId)
+
+  return newBooking
+}
+
+
+const bookingService = 
+{ getBookings, 
+  postBooking, 
+  putBooking };
 
 export default bookingService;
