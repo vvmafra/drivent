@@ -21,10 +21,10 @@ export async function postBooking(req:AuthenticatedRequest, res: Response) {
     return res.status(httpStatus.OK).send(booking.id);
   } catch (e) {
     console.log(e)
-    if (e.type === 'RemoteError' || e.type === 'HotelError' || e.type === 'PaymentError' || e.type === 'RoomError') {
+    if (e.name === 'RemoteError' || e.name === 'HotelError' || e.name === 'PaymentError' || e.name === 'RoomError') {
       return res.status(httpStatus.FORBIDDEN).send(e.message)
     }
-    else if (e.type === 'NoRoomError') return res.status(httpStatus.NOT_FOUND).send(e.message)
+    else if (e.name === 'NoRoomError') return res.status(httpStatus.NOT_FOUND).send(e.message)
 
     return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
