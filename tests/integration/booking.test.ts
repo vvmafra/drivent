@@ -12,7 +12,7 @@ import { createEnrollmentWithAddress,
     createTicketTypeWithoutHotel,
     createRoomsWithoutCapacity} from '../factories';
 import { TicketStatus } from '@prisma/client';
-import { createBooking } from '../factories/booking-factory';
+import { createBooking, createBookingRandomRoomId } from '../factories/booking-factory';
 import faker from '@faker-js/faker';
 
 const server = supertest(app)
@@ -151,14 +151,15 @@ describe('POST /booking', () => {
         //     const token = await generateValidToken(user);
         //     const enrollment = await createEnrollmentWithAddress(user);
         //     const ticketType = await createTicketWithHotel();
-        //     await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+        //     await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID); 
         //     const hotel = await createHotel()
         //     const room = await createRooms(hotel.id)
-        //     await createBooking(user.id, 0)
     
         //     const response = await server.post('/booking').set('Authorization', `Bearer ${token}`);
     
         //     expect(response.status).toBe(httpStatus.NOT_FOUND)
         // })
+
+        
     })
 })

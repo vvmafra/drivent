@@ -14,8 +14,7 @@ async function getBookings(userId: number) {
 async function postBooking(userId:number, roomId: number) {
   const enrollment = await enrollmentRepository.findUser(userId)
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
-  const booking = await bookingRepository.findBookingByuserId(userId)
-  const room = await bookingRepository.findRoom(booking.roomId)
+  const room = await bookingRepository.findRoom(roomId)
 
   if (ticket.TicketType.isRemote === true) throw genericError('RemoteError', 'Ticket is remote')
 
@@ -28,6 +27,8 @@ async function postBooking(userId:number, roomId: number) {
   if (!room) throw genericError('NoRoomError', 'This room doesnt exist')
 
   const newBooking = await bookingRepository.addBooking(userId, roomId);
+
+  console.log(newBooking)
 
   return newBooking;
 }
