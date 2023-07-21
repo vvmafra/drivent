@@ -29,14 +29,6 @@ async function findBookingByuserId(userId: number){
   })
 }
 
-async function findRoom(id: number){
-  return await prisma.room.findFirst({
-    where: {
-      id
-    }
-  })
-}
-
 async function addBooking(userId:number, roomId: number){
   return await prisma.booking.create({
     data: {
@@ -60,7 +52,6 @@ async function putBooking(roomId:number, bookingId:number) {
 export default {
     findBookingObj,
     findBookingByuserId,
-    findRoom,
     addBooking,
     putBooking
   };

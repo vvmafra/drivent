@@ -25,7 +25,19 @@ async function findHotelId(hotelId:number) {
   return {Rooms, hotel}
 }
 
+async function findRoom(id: number){
+  return await prisma.room.findUnique({
+    where: {
+      id
+    }, select: {
+      capacity: true,
+      Booking: true
+    }
+  })
+}
+
 export default {
   findHotels,
-  findHotelId
+  findHotelId,
+  findRoom
 };
