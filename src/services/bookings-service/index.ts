@@ -14,14 +14,16 @@ async function getBookings(userId: number) {
 async function postBooking(userId:number, roomId: number) {
   const enrollment = await enrollmentRepository.findUser(userId)
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id)
-  const room = await bookingRepository.findRoom(roomId)
+ 
 
   if (ticket.TicketType.isRemote === true) throw genericError('RemoteError', 'Ticket is remote')
 
   if (ticket.TicketType.includesHotel === false) throw genericError('HotelError', 'Ticket doesnt include hotel')
 
   if (ticket.status === "RESERVED") throw genericError('PaymentError', 'Ticket isnt paid yet')
-    
+  
+  const room = await bookingRepository.findRoom(roomId)
+
   if (room.capacity === 0) throw genericError('RoomError', 'Room is already full')
 
   if (!room) throw genericError('NoRoomError', 'This room doesnt exist')
