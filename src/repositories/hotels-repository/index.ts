@@ -25,10 +25,10 @@ async function findHotelId(hotelId:number) {
   return {Rooms, hotel}
 }
 
-async function findRoom(id: number){
+async function findRoom(roomId: number) {
   return await prisma.room.findFirst({
     where: {
-      id
+      id: roomId
     }, select: {
       capacity: true,
       Booking: true

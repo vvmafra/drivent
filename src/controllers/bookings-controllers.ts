@@ -20,7 +20,6 @@ export async function postBooking(req:AuthenticatedRequest, res: Response) {
     const booking = await bookingService.postBooking(userId, roomId);
     return res.status(httpStatus.OK).send({bookingId: booking.id});
   } catch (e) {
-    console.log(e)
     if (e.name === 'RemoteError' || e.name === 'HotelError' || e.name === 'PaymentError' || e.name === 'RoomError') {
       return res.status(httpStatus.FORBIDDEN).send(e.message)
     }
@@ -32,7 +31,7 @@ export async function postBooking(req:AuthenticatedRequest, res: Response) {
 
 export async function changeRoom(req:AuthenticatedRequest, res: Response) {
   const userId:number = req.userId
-  const roomId:number = req.body
+  const roomId:number = parseInt(req.body.roomId)
   const bookingId:number = parseInt(req.params.bookingId)
 
   try {
