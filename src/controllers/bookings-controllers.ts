@@ -39,10 +39,10 @@ export async function changeRoom(req:AuthenticatedRequest, res: Response) {
     const booking = await bookingService.putBooking(userId, roomId, bookingId);
     return res.status(httpStatus.OK).send({bookingId: booking.id});
   } catch (e) {
-    if (e.type === 'RemoteError' || e.type === 'HotelError') {
+    if (e.name === 'RemoteError' || e.name === 'HotelError') {
       return res.status(httpStatus.FORBIDDEN).send(e.message)
     }
-    else if (e.type === 'NoRoomError') return res.status(httpStatus.NOT_FOUND).send(e.message)
+    else if (e.name === 'NoRoomError') return res.status(httpStatus.NOT_FOUND).send(e.message)
 
     return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
