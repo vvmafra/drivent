@@ -26,7 +26,7 @@ async function postBooking(userId:number, roomId: number) {
 
   if (!room) throw genericError('NoRoomError', 'This room doesnt exist')
 
-  if (room.capacity === 0) throw genericError('RoomError', 'Room is already full')
+  if (room.capacity <= room.Booking.length) throw genericError('RoomError', 'Room is already full')
 
   const newBooking = await bookingRepository.addBooking(userId, roomId);
 
@@ -42,7 +42,7 @@ async function putBooking(userId:number, roomId: number, bookingId: number) {
     
   const newRoom = await hotelsRepository.findRoom(roomId)
 
-  if (newRoom.capacity === 0) throw genericError('RoomError', 'Room is already full')
+  if (newRoom.capacity <= newRoom.Booking.length) throw genericError('RoomError', 'Room is already full')
   
   if (!newRoom) throw genericError('NoRoomError', 'This room doesnt exist')
   
