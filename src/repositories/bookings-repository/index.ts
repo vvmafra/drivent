@@ -7,6 +7,10 @@ async function findBookingObj(userId: number){
     }
   });
 
+  if (!booking) {
+    return null;
+  }
+
   const room =  await prisma.room.findFirst({
     where: {
       id: booking.roomId
