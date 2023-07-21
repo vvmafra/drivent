@@ -96,7 +96,9 @@ describe('POST /booking', () => {
             const room = await createRooms(hotel.id)
             await createBooking(user.id, room.id)
     
-            const response = await server.post('/booking').set('Authorization', `Bearer ${token}`);
+            const response = await server.post('/booking')
+            .set('Authorization', `Bearer ${token}`)
+            .send({roomId: room.id})
     
             expect(response.status).toBe(httpStatus.FORBIDDEN)
         })
@@ -111,8 +113,10 @@ describe('POST /booking', () => {
             const room = await createRooms(hotel.id)
             await createBooking(user.id, room.id)
     
-            const response = await server.post('/booking').set('Authorization', `Bearer ${token}`);
-    
+            const response = await server.post('/booking')
+            .set('Authorization', `Bearer ${token}`)
+            .send({roomId: room.id})
+
             expect(response.status).toBe(httpStatus.FORBIDDEN)
         })
 
@@ -126,8 +130,10 @@ describe('POST /booking', () => {
             const room = await createRooms(hotel.id)
             await createBooking(user.id, room.id)
     
-            const response = await server.post('/booking').set('Authorization', `Bearer ${token}`);
-    
+            const response = await server.post('/booking')
+            .set('Authorization', `Bearer ${token}`)
+            .send({roomId: room.id})
+
             expect(response.status).toBe(httpStatus.FORBIDDEN)
         })
 
@@ -141,24 +147,29 @@ describe('POST /booking', () => {
             const room = await createRoomsWithoutCapacity(hotel.id)
             await createBooking(user.id, room.id)
     
-            const response = await server.post('/booking').set('Authorization', `Bearer ${token}`);
-    
+            const response = await server.post('/booking')
+            .set('Authorization', `Bearer ${token}`)
+            .send({roomId: room.id})
+
             expect(response.status).toBe(httpStatus.FORBIDDEN)
         })
 
-        // it('should respond with status 404 if room doesnt exist', async () => {
-        //     const user = await createUser();
-        //     const token = await generateValidToken(user);
-        //     const enrollment = await createEnrollmentWithAddress(user);
-        //     const ticketType = await createTicketWithHotel();
-        //     await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID); 
-        //     const hotel = await createHotel()
-        //     const room = await createRooms(hotel.id)
+        it('should respond with status 404 if room doesnt exist', async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const enrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createTicketWithHotel();
+            await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID); 
+            const hotel = await createHotel()
+            const room = await createRooms(hotel.id)
     
-        //     const response = await server.post('/booking').set('Authorization', `Bearer ${token}`);
-    
-        //     expect(response.status).toBe(httpStatus.NOT_FOUND)
-        // })
+            const response = await server.post('/booking')
+            .set('Authorization', `Bearer ${token}`)
+            .send({roomId: 1})
+            
+            
+            expect(response.status).toBe(httpStatus.NOT_FOUND)
+        })
 
         it('should respond with status 200 and booking id', async () => {
             const user = await createUser();
@@ -169,11 +180,15 @@ describe('POST /booking', () => {
             const hotel = await createHotel()
             const room = await createRooms(hotel.id)
             const booking = await createBooking(user.id, room.id)
+
+            const body = { roomId: room.id}
     
-            const response = await server.post('/booking').set('Authorization', `Bearer ${token}`);
+            const response = await server.post('/booking')
+            .set('Authorization', `Bearer ${token}`)
+            .send(body)
     
             expect(response.status).toEqual(httpStatus.OK)
-            expect(response.body).toEqual({id: booking.id})
+            expect(response.body).toEqual({bookingId: expect.any(Number)})
         })
         
     })
