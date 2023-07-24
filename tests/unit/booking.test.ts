@@ -1,5 +1,5 @@
 import bookingsRepository from "@/repositories/bookings-repository"
-import bookingService from "@/services/bookings-service"
+import bookingService from "@/services/booking-service"
 import { notFoundError } from "@/errors"
 
 
@@ -38,8 +38,13 @@ describe("Booking Service Unit Tests", () => {
             jest.spyOn(bookingsRepository, "findBookingObj").mockResolvedValueOnce(null)
 
             const booking = bookingService.getBookings(1)
-            await expect(booking).rejects.toEqual(notFoundError())
+            expect(booking).rejects.toEqual(notFoundError())
         })
+    })
+
+    describe("post booking tests", () => {
+        it("should respond with ")
+
     })
 
 })
