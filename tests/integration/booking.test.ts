@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import supertest from 'supertest';
 import app, { init } from '@/app';
 import { cleanDb, generateValidToken } from '../helpers';
+import * as jwt from 'jsonwebtoken';
 import { createEnrollmentWithAddress, 
     createHotel, 
     createTicket, 
@@ -31,6 +32,23 @@ describe('GET /booking', () => {
 
         expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     })
+
+    it('should respond with status 401 if given token is not valid', async () => {
+        const token = faker.lorem.word();
+
+        const response = await server.get('/booking').set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(httpStatus.UNAUTHORIZED)
+    })
+
+    it('should respond with status 401 if there is no session for given token',  async () => {
+        const userWithoutSession = await createUser();
+        const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
+    
+        const response = await server.get('/booking').set('Authorization', `Bearer ${token}`);
+    
+        expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+      });
 
    
     describe('when token is valid', () => {
@@ -83,7 +101,23 @@ describe('POST /booking', () => {
 
         expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     })
+    
+    it('should respond with status 401 if given token is not valid', async () => {
+        const token = faker.lorem.word();
 
+        const response = await server.post('/booking').set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(httpStatus.UNAUTHORIZED)
+    })
+
+    it('should respond with status 401 if there is no session for given token',  async () => {
+        const userWithoutSession = await createUser();
+        const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
+    
+        const response = await server.post('/booking').set('Authorization', `Bearer ${token}`);
+    
+        expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+      });
    
     describe('when token is valid', () => {
         it('should respond with status 403 if ticket is remote', async () => {
@@ -200,6 +234,25 @@ describe('PUT /booking/:bookingId', () => {
         expect(response.status).toBe(httpStatus.UNAUTHORIZED);
     })
 
+    it('should respond with status 401 if given token is not valid', async () => {
+        const token = faker.lorem.word();
+        const number = faker.datatype.number({max:100})
+        
+        const response = await server.put(`/booking/${number}`).set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toBe(httpStatus.UNAUTHORIZED)
+    })
+
+    it('should respond with status 401 if there is no session for given token',  async () => {
+        const userWithoutSession = await createUser();
+        const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
+        const number = faker.datatype.number({max:100})
+
+        const response = await server.put(`/booking/${number}`).set('Authorization', `Bearer ${token}`);
+    
+        expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+      });
+
    
     describe('when token is valid', () => {
         it('should respond with status 403 if user doesnt have a booking yet', async () => {
@@ -271,6 +324,5 @@ describe('PUT /booking/:bookingId', () => {
             expect(response.status).toEqual(httpStatus.OK)
             expect(response.body).toEqual({bookingId: expect.any(Number)})
         })
-        
     })
 })
